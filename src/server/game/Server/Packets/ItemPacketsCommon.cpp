@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,7 @@ void WorldPackets::Item::ItemInstance::Initialize(::Item const* item)
     {
         ItemBonus = boost::in_place();
         ItemBonus->BonusListIDs.insert(ItemBonus->BonusListIDs.end(), bonusListIds.begin(), bonusListIds.end());
-        ItemBonus->Context = item->m_itemData->Context;
+        ItemBonus->Context = item->GetContext();
     }
 
     if (uint32 mask = item->m_itemData->ModifiersMask)
@@ -56,12 +56,12 @@ void WorldPackets::Item::ItemInstance::Initialize(UF::SocketedGem const* gem)
     ItemID = gem->ItemID;
 
     ItemBonusInstanceData bonus;
-    bonus.Context = gem->Context;
+    bonus.Context = ItemContext(*gem->Context);
     for (uint16 bonusListId : gem->BonusListIDs)
         if (bonusListId)
             bonus.BonusListIDs.push_back(bonusListId);
 
-    if (bonus.Context || !bonus.BonusListIDs.empty())
+    if (bonus.Context != ItemContext::NONE || !bonus.BonusListIDs.empty())
         ItemBonus = bonus;
 }
 
@@ -131,7 +131,7 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceDa
 {
     uint32 bonusListIdSize;
 
-    data >> itemBonusInstanceData.Context;
+    itemBonusInstanceData.Context = data.read<ItemContext>();
     data >> bonusListIdSize;
 
     for (uint32 i = 0u; i < bonusListIdSize; ++i)

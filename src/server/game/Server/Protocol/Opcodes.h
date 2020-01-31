@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -781,11 +780,9 @@ enum OpcodeClient : uint16
     CMSG_WORLD_PORT_RESPONSE                          = 0x35FA,
     CMSG_WRAP_ITEM                                    = 0x3994,
 
-    CMSG_ACCEPT_LEVEL_GRANT                           = 0xBADD,
     CMSG_BF_MGR_ENTRY_INVITE_RESPONSE                 = 0xBADD,
     CMSG_BF_MGR_QUEUE_INVITE_RESPONSE                 = 0xBADD,
     CMSG_BF_MGR_QUEUE_EXIT_REQUEST                    = 0xBADD,
-    CMSG_GRANT_LEVEL                                  = 0xBADD,
 };
 
 enum OpcodeServer : uint16
@@ -1830,7 +1827,6 @@ enum OpcodeServer : uint16
     SMSG_BF_MGR_ENTRY_INVITE                          = 0xBADD,
     SMSG_BF_MGR_QUEUE_INVITE                          = 0xBADD,
     SMSG_BF_MGR_QUEUE_REQUEST_RESPONSE                = 0xBADD,
-    SMSG_PROPOSE_LEVEL_GRANT                          = 0xBADD,
 };
 
 inline bool IsInstanceOnlyOpcode(uint32 opcode)

@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,6 +17,8 @@
 
 #include "ObjectMgr.h"
 #include "ArenaTeamMgr.h"
+#include "AzeriteEmpoweredItem.h"
+#include "AzeriteItem.h"
 #include "Chat.h"
 #include "Containers.h"
 #include "DatabaseEnv.h"
@@ -417,7 +418,7 @@ void ObjectMgr::LoadCreatureTemplates()
     //                                        9         10        11              12        13        14                      15                 16
                                              "TitleAlt, IconName, gossip_menu_id, minlevel, maxlevel, HealthScalingExpansion, RequiredExpansion, VignetteID, "
     //                                        17       18       19          20         21     22    23         24              25               26            27
-                                             "faction, npcflag, speed_walk, speed_run, scale, rank, dmgschool, BaseAttackTime, RangeAttackTime, BaseVariance, RangeVariance, "
+                                             "faction, npcflag, speed_walk, speed_run, scale, `rank`, dmgschool, BaseAttackTime, RangeAttackTime, BaseVariance, RangeVariance, "
     //                                        28          29          30           31           32            33      34             35
                                              "unit_class, unit_flags, unit_flags2, unit_flags3, dynamicflags, family, trainer_class, type, "
     //                                        36          37           38      39              40        41           42           43           44           45           46
@@ -2946,7 +2947,7 @@ void ObjectMgr::LoadItemTemplates()
     }
 
     for (std::set<uint32>::const_iterator itr = notFoundOutfit.begin(); itr != notFoundOutfit.end(); ++itr)
-        TC_LOG_ERROR("sql.sql", "Item (Entry: %u) does not exist in `item_template` but is referenced in `CharStartOutfit.dbc`", *itr);
+        TC_LOG_ERROR("sql.sql", "Item (Entry: %u) does not exist but is referenced in `CharStartOutfit.dbc`", *itr);
 
     TC_LOG_INFO("server.loading", ">> Loaded %u item templates in %u ms", sparseCount, GetMSTimeDiffToNow(oldMSTime));
 }
@@ -3381,7 +3382,7 @@ void ObjectMgr::LoadPlayerInfo()
 
                 if (!GetItemTemplate(item_id))
                 {
-                    TC_LOG_ERROR("sql.sql", "Item id %u (race %u class %u) in `playercreateinfo_item` table but not listed in `item_template`, ignoring.", item_id, current_race, current_class);
+                    TC_LOG_ERROR("sql.sql", "Item id %u (race %u class %u) in `playercreateinfo_item` table but it does not exist, ignoring.", item_id, current_race, current_class);
                     continue;
                 }
 
@@ -4097,7 +4098,7 @@ void ObjectMgr::LoadQuests()
 
         Quest* qinfo = iter->second;
 
-        // additional quest integrity checks (GO, creature_template and item_template must be loaded already)
+        // additional quest integrity checks (GO, creature_template and items must be loaded already)
 
         if (qinfo->GetQuestType() >= MAX_QUEST_TYPES)
             TC_LOG_ERROR("sql.sql", "Quest %u has `Method` = %u, expected values are 0, 1 or 2.", qinfo->GetQuestId(), qinfo->GetQuestType());
@@ -5867,12 +5868,13 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             // if it is mail from non-player, or if it's already return mail, it shouldn't be returned, but deleted
             if (m->messageType != MAIL_NORMAL || (m->checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
             {
+                CharacterDatabaseTransaction nonTransactional(nullptr);
                 // mail open and then not returned
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
-                    stmt->setUInt64(0, itr2->item_guid);
-                    CharacterDatabase.Execute(stmt);
+                    Item::DeleteFromDB(nonTransactional, itr2->item_guid);
+                    AzeriteItem::DeleteFromDB(nonTransactional, itr2->item_guid);
+                    AzeriteEmpoweredItem::DeleteFromDB(nonTransactional, itr2->item_guid);
                 }
 
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
@@ -6841,7 +6843,7 @@ void ObjectMgr::SetHighestGuids()
     if (result)
         sGuildMgr->SetNextGuildId((*result)[0].GetUInt64()+1);
 
-    result = CharacterDatabase.Query("SELECT MAX(guid) FROM groups");
+    result = CharacterDatabase.Query("SELECT MAX(guid) FROM `groups`");
     if (result)
         sGroupMgr->SetGroupDbStoreSize((*result)[0].GetUInt32()+1);
 

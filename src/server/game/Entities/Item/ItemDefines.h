@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -215,6 +215,22 @@ enum ItemModifier : uint16
     ITEM_MODIFIER_PVP_RATING                            = 26,
 
     MAX_ITEM_MODIFIERS
+};
+
+enum class AzeriteEssenceActivateResult : uint32
+{
+    None                = 0,
+    EssenceNotUnlocked  = 2,    // Arg: AzeriteEssenceID
+    CantDoThatRightNow  = 3,
+    AffectingCombat     = 4,
+    CantRemoveEssence   = 5,    // Arg: SpellID of active essence on cooldown
+    ChallengeModeActive = 6,
+    NotInRestArea       = 7,
+    ConditionFailed     = 8,
+    SlotLocked          = 9,
+    NotAtForge          = 10,
+    HeartLevelTooLow    = 11,   // Arg: RequiredLevel
+    NotEquipped         = 12
 };
 
 #endif // ItemDefines_h__

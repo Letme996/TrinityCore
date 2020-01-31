@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -119,7 +119,7 @@ WorldPackets::Character::EnumCharactersResult::CharacterInfo::CharacterInfo(Fiel
         VisualItems[slot].InvType = Player::GetUInt32ValueFromArray(equipment, visualBase);
         VisualItems[slot].DisplayID = Player::GetUInt32ValueFromArray(equipment, visualBase + 1);
         VisualItems[slot].DisplayEnchantID = Player::GetUInt32ValueFromArray(equipment, visualBase + 2);
-        VisualItems[slot].DisplayEnchantID = Player::GetUInt32ValueFromArray(equipment, visualBase + 3);
+        VisualItems[slot].Subclass = Player::GetUInt32ValueFromArray(equipment, visualBase + 3);
     }
 }
 

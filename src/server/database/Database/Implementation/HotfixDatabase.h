@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -74,6 +74,32 @@ enum HotfixDatabaseStatements : uint32
 
     HOTFIX_SEL_AUCTION_HOUSE,
     HOTFIX_SEL_AUCTION_HOUSE_LOCALE,
+
+    HOTFIX_SEL_AZERITE_EMPOWERED_ITEM,
+
+    HOTFIX_SEL_AZERITE_ESSENCE,
+    HOTFIX_SEL_AZERITE_ESSENCE_LOCALE,
+
+    HOTFIX_SEL_AZERITE_ESSENCE_POWER,
+    HOTFIX_SEL_AZERITE_ESSENCE_POWER_LOCALE,
+
+    HOTFIX_SEL_AZERITE_ITEM,
+
+    HOTFIX_SEL_AZERITE_ITEM_MILESTONE_POWER,
+
+    HOTFIX_SEL_AZERITE_KNOWLEDGE_MULTIPLIER,
+
+    HOTFIX_SEL_AZERITE_LEVEL_INFO,
+
+    HOTFIX_SEL_AZERITE_POWER,
+
+    HOTFIX_SEL_AZERITE_POWER_SET_MEMBER,
+
+    HOTFIX_SEL_AZERITE_TIER_UNLOCK,
+
+    HOTFIX_SEL_AZERITE_TIER_UNLOCK_SET,
+
+    HOTFIX_SEL_AZERITE_UNLOCK_MAPPING,
 
     HOTFIX_SEL_BANK_BAG_SLOT_PRICES,
 
@@ -437,6 +463,8 @@ enum HotfixDatabaseStatements : uint32
 
     HOTFIX_SEL_SPECIALIZATION_SPELLS,
     HOTFIX_SEL_SPECIALIZATION_SPELLS_LOCALE,
+
+    HOTFIX_SEL_SPEC_SET_MEMBER,
 
     HOTFIX_SEL_SPELL_AURA_OPTIONS,
 

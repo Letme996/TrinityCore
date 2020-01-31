@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2247,6 +2246,29 @@ void Guild::SendLoginInfo(WorldSession* session)
 
     member->SetStats(player);
     member->AddFlag(GUILDMEMBER_STATUS_ONLINE);
+}
+
+void Guild::SendEventAwayChanged(ObjectGuid const& memberGuid, bool afk, bool dnd)
+{
+    Member* member = GetMember(memberGuid);
+    if (!member)
+        return;
+
+    if (afk)
+        member->AddFlag(GUILDMEMBER_STATUS_AFK);
+    else
+        member->RemFlag(GUILDMEMBER_STATUS_AFK);
+
+    if (dnd)
+        member->AddFlag(GUILDMEMBER_STATUS_DND);
+    else
+        member->RemFlag(GUILDMEMBER_STATUS_DND);
+
+    WorldPackets::Guild::GuildEventAwayChange awayChange;
+    awayChange.Guid = memberGuid;
+    awayChange.AFK = afk;
+    awayChange.DND = dnd;
+    BroadcastPacket(awayChange.Write());
 }
 
 void Guild::SendEventBankMoneyChanged() const

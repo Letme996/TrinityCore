@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -107,6 +106,14 @@ namespace WorldPackets
     namespace Auth
     {
         enum class ConnectToSerial : uint32;
+    }
+
+    namespace Azerite
+    {
+        class AzeriteEmpoweredItemSelectPower;
+        class AzeriteEmpoweredItemViewed;
+        class AzeriteEssenceUnlockMilestone;
+        class AzeriteEssenceActivateEssence;
     }
 
     namespace Bank
@@ -1605,10 +1612,6 @@ class TC_GAME_API WorldSession
         void HandleGuildBankTextQuery(WorldPackets::Guild::GuildBankTextQuery& packet);
         void HandleGuildBankSetTabText(WorldPackets::Guild::GuildBankSetTabText& packet);
 
-        // Refer-a-Friend
-        void HandleGrantLevel(WorldPackets::RaF::GrantLevel& grantLevel);
-        void HandleAcceptGrantLevel(WorldPackets::RaF::AcceptLevelGrant& acceptLevelGrant);
-
         // Calendar
         void HandleCalendarGetCalendar(WorldPackets::Calendar::CalendarGetCalendar& calendarGetCalendar);
         void HandleCalendarGetEvent(WorldPackets::Calendar::CalendarGetEvent& calendarGetEvent);
@@ -1721,6 +1724,12 @@ class TC_GAME_API WorldSession
 
         // Scenario
         void HandleQueryScenarioPOI(WorldPackets::Scenario::QueryScenarioPOI& queryScenarioPOI);
+
+        // Azerite
+        void HandleAzeriteEssenceUnlockMilestone(WorldPackets::Azerite::AzeriteEssenceUnlockMilestone& azeriteEssenceUnlockMilestone);
+        void HandleAzeriteEssenceActivateEssence(WorldPackets::Azerite::AzeriteEssenceActivateEssence& azeriteEssenceActivateEssence);
+        void HandleAzeriteEmpoweredItemViewed(WorldPackets::Azerite::AzeriteEmpoweredItemViewed& azeriteEmpoweredItemViewed);
+        void HandleAzeriteEmpoweredItemSelectPower(WorldPackets::Azerite::AzeriteEmpoweredItemSelectPower& azeriteEmpoweredItemSelectPower);
 
         union ConnectToKey
         {
